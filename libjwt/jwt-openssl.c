@@ -214,7 +214,7 @@ int jwt_sign_sha_pem(jwt_t *jwt, char **out, unsigned int *len,
 	if (pkey_type != type)
 		SIGN_ERROR(EINVAL);
 
-	mdctx = EVP_MD_CTX_create();
+	mdctx = EVP_MD_CTX_new();
 	if (mdctx == NULL)
 		SIGN_ERROR(ENOMEM);
 
@@ -297,7 +297,7 @@ jwt_sign_sha_pem_done:
 	if (pkey)
 		EVP_PKEY_free(pkey);
 	if (mdctx)
-		EVP_MD_CTX_destroy(mdctx);
+		EVP_MD_CTX_free(mdctx);
 	if (ec_sig)
 		ECDSA_SIG_free(ec_sig);
 
@@ -416,7 +416,7 @@ int jwt_verify_sha_pem(jwt_t *jwt, const char *head, const char *sig_b64)
 			VERIFY_ERROR(EINVAL);
 	}
 
-	mdctx = EVP_MD_CTX_create();
+	mdctx = EVP_MD_CTX_new();
 	if (mdctx == NULL)
 		VERIFY_ERROR(ENOMEM);
 
@@ -438,7 +438,7 @@ jwt_verify_sha_pem_done:
 	if (pkey)
 		EVP_PKEY_free(pkey);
 	if (mdctx)
-		EVP_MD_CTX_destroy(mdctx);
+		EVP_MD_CTX_free(mdctx);
 	if (sig)
 		jwt_freemem(sig);
 	if (ec_sig)
